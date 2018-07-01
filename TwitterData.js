@@ -13,7 +13,7 @@ var params = {
 var params2 = {
     screen_name:'=Tristan Liu',
     count:2
-}
+}//////////////////////
 router.get('/', function (req, res, next) {// this one handle the POST method
     T.get('search/tweets', params,(err, data, response)=>{
 
