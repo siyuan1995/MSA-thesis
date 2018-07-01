@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Socia Media Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    -->
+   <style>
+     body {
+       position: relative;
+     }
+    </style>
+  </head>
+
+
+  <body>
+
+
+
+  <div style="margin-bottom: 30px" >
+    <span data-feather="home" style="color: cornflowerblue"> </span>
+    <a style="font-size: 40px">&nbsp;Social Media Dashboard</a>
+  </div><!--标题部分-->
+
+  <div class="container-fluid">
+    <div class="row">
+
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">
+                <span data-feather="home"></span>
+                Function 1 <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="file"></span> <!--span 提供行内容器-->
+                Function 2
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="shopping-cart"></span>
+                Function 3
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="users"></span>
+                Function 4
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="bar-chart-2"></span>
+                Function 5
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="layers"></span>
+                Function 6
+              </a>
+            </li>
+          </ul>
+
+          <!--<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Saved reports</span>
+            <a class="d-flex align-items-center text-muted" href="#">
+              <span data-feather="plus-circle"></span>
+            </a>
+          </h6>
+          -->
+          <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="file-text"></span>
+                Function 7
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="file-text"></span>
+                Function 8
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="file-text"></span>
+                Function 9
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span data-feather="file-text"></span>
+                Function 10
+              </a>
+            </li>
+          </ul><!--ul是无序列表-->
+        </div>
+      </nav><!--side bar-->
+
+
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <!--
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <!--<h1 class="h2">Dashboard</h1>-->
+          <!--<div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+              <button class="btn btn-sm btn-outline-secondary">Share</button>
+              <button class="btn btn-sm btn-outline-secondary">Export</button>
+            </div>
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+              <span data-feather="calendar"></span>
+              This week
+            </button>
+          </div>
+
+        </div>
+
+        <canvas class="my-4 w-100" id="myChart" width="800" height="80"></canvas>
+
+        <h2>Section title</h2>
+        <div class="table-responsive">
+          <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Header</th>
+              <th>Header</th>
+              <th>Header</th>
+              <th>Header</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>1,001</td>
+              <td>Lorem</td>
+              <td>ipsum</td>
+              <td>dolor</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,002</td>
+              <td>amet</td>
+              <td>consectetur</td>
+              <td>adipiscing</td>
+              <td>elit</td>
+            </tr>
+            <tr>
+              <td>1,003</td>
+              <td>Integer</td>
+              <td>nec</td>
+              <td>odio</td>
+              <td>Praesent</td>
+            </tr>
+            <tr>
+              <td>1,003</td>
+              <td>libero</td>
+              <td>Sed</td>
+              <td>cursus</td>
+              <td>ante</td>
+            </tr>
+            <tr>
+              <td>1,004</td>
+              <td>dapibus</td>
+              <td>diam</td>
+              <td>Sed</td>
+              <td>nisi</td>
+            </tr>
+            <tr>
+              <td>1,005</td>
+              <td>Nulla</td>
+              <td>quis</td>
+              <td>sem</td>
+              <td>at</td>
+            </tr>
+            <tr>
+              <td>1,006</td>
+              <td>nibh</td>
+              <td>elementum</td>
+              <td>imperdiet</td>
+              <td>Duis</td>
+            </tr>
+            <tr>
+              <td>1,007</td>
+              <td>sagittis</td>
+              <td>ipsum</td>
+              <td>Praesent</td>
+              <td>mauris</td>
+            </tr>
+            <tr>
+              <td>1,008</td>
+              <td>Fusce</td>
+              <td>nec</td>
+              <td>tellus</td>
+              <td>sed</td>
+            </tr>
+            <tr>
+              <td>1,009</td>
+              <td>augue</td>
+              <td>semper</td>
+              <td>porta</td>
+              <td>Mauris</td>
+            </tr>
+            <tr>
+              <td>1,010</td>
+              <td>massa</td>
+              <td>Vestibulum</td>
+              <td>lacinia</td>
+              <td>arcu</td>
+            </tr>
+            <tr>
+              <td>1,011</td>
+              <td>eget</td>
+              <td>nulla</td>
+              <td>Class</td>
+              <td>aptent</td>
+            </tr>
+            <tr>
+              <td>1,012</td>
+              <td>taciti</td>
+              <td>sociosqu</td>
+              <td>ad</td>
+              <td>litora</td>
+            </tr>
+            <tr>
+              <td>1,013</td>
+              <td>torquent</td>
+              <td>per</td>
+              <td>conubia</td>
+              <td>nostra</td>
+            </tr>
+            <tr>
+              <td>1,014</td>
+              <td>per</td>
+              <td>inceptos</td>
+              <td>himenaeos</td>
+              <td>Curabitur</td>
+            </tr>
+            <tr>
+              <td>1,015</td>
+              <td>sodales</td>
+              <td>ligula</td>
+              <td>in</td>
+              <td>libero</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        -->
+        <div class="row-fluid" ><!--这地方row-fluid一定要对应着上面container-fluid，要不然div的位置就会改变，比如说给div添加id属性，结果导致位置发生改变-->
+          <div class="col-md-4" style="background-color:lightskyblue;height:400px;width:660px;margin-left: 16px;" id="map">
+            map
+          </div>
+
+          <div class="col-md-4" style="background-color:lightskyblue;height:400px;width:310px;margin-left: 10px;">
+
+
+          </div>
+
+          <div class="col-md-4" style="background-color:lightskyblue;height:400px;width:300px;margin-left: 10px;">
+
+          </div>
+        </div><!--第一个模块-->
+
+        <div class="row-fluid">
+
+          <div class="col-md-4" style="background-color:lightskyblue;height:270px;width:320px;margin-top: 10px;margin-left: 16px;">
+            chart
+          </div>
+          <div class="col-md-4" style="background-color:lightskyblue;height:270px;width:330px;margin-left: 10px;margin-top: 10px">
+            chart
+          </div>
+
+          <div class="col-md-4" style="background-color:lightskyblue;height:270px;width:310px;margin-left: 10px;margin-top: 10px">
+
+          </div>
+
+          <div class="col-md-4" style="background-color:lightskyblue;height:270px;width:300px;margin-left: 10px;margin-top: 10px">
+
+          </div>
+
+
+        </div><!--第二个模块-->
+
+        <div class="row-fluid">
+          <div id="tweets" class="col-md-12" style="background-color:lightskyblue;height:520px;width:1290px;margin-top: 10px;margin-bottom:10px;margin-left: 16px;">
+            Twitter content
+
+          </div>
+
+
+        </div><!--第三个模块-->
+
+      </main>
+    </div>
+  </div><!--整个container，里面包括一个side bar，三个模块-->
+
+
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+
+  <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+    -->
+
+  <!-- Icons-->
+  <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+  <script>
+      feather.replace()
+  </script>
+
+  <!-- Graphs-->
+  <!--
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+  <script>
+      var ctx = document.getElementById("myChart");
+      var myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+              labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+              datasets: [{
+                  data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
+                  lineTension: 0,
+                  backgroundColor: 'transparent',
+                  borderColor: '#007bff',
+                  borderWidth: 4,
+                  pointBackgroundColor: '#007bff'
+              }]
+          },
+          options: {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero: false
+                      }
+                  }]
+              },
+              legend: {
+                  display: false,
+              }
+          }
+      });
+  </script>
+  -->
+
+
+
+
+
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+  </script><!--这地方如果用jquery-3.3.1-slim.min.js的话就会造成$.ajax is not
+  a function 的错误，所有不要用slim版本/ 如何引用本地的？ -->
+
+  <script type="text/javascript">
+      var map;
+      var rectangle;
+      var infoWindow;
+      var $=jQuery.noConflict();
+
+      function initMap() {
+          map = new google.maps.Map(document.getElementById('map'), {
+              center: {lat: +43.6532, lng: -79.3832},
+              zoom: 8
+          });
+
+          var bounds={north:44,south:43,east:-79,west:-80};
+          rectangle = new google.maps.Rectangle({
+              bounds: bounds,
+              editable: true,
+              draggable: true
+          });
+          rectangle.setMap(map);
+          infoWindow = new google.maps.InfoWindow();
+          rectangle.addListener('bounds_changed',()=>{
+              var ne;
+              var sw;
+
+               ne = rectangle.getBounds().getNorthEast();
+               sw = rectangle.getBounds().getSouthWest();
+
+              var contentString = '<b>Rectangle moved.</b><br>' +
+                  'New north-east corner: ' + ne.lat() + ', ' + ne.lng() + '<br>' +
+                  'New south-west corner: ' + sw.lat() + ', ' + sw.lng();
+
+              // Set the info window's content and position.
+              infoWindow.setContent(contentString);
+              infoWindow.setPosition(ne);
+              infoWindow.open(map);
+                //console.log($.ajax);
+
+
+              $.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
+                  async : false,
+                  cache : false,
+                  type : 'POST',
+                  url:'/Coords', // the path here is like you give the name for the link. specifies the URL to send the request to. Default is the
+                  //current page. AND THIS STEP EQUALS TO SEND A REQUEST TO THE PATH '/Coords'
+                  datatype:'json',
+                  data:{
+                      top:ne.lng,
+                      right:ne.lat,
+                      bottom:sw.lng,
+                      left:sw.lat
+
+                  },
+                  success:function(data){
+                      console.log('success');
+                        //$( '#tweets' ).html(data);
+                  },
+                  error:function(){}
+              });
+
+
+              $.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
+                  async : false,
+                  cache : false,
+                  type : 'GET',
+                  url:'/TweetContent', // the path here is like you give the name for the link. specifies the URL to send the request to. Default is the
+                  //current page. AND THIS STEP EQUALS TO SEND A REQUEST TO THE PATH '/Coords'
+                  datatype:'json',
+                  success:function(data){
+                      console.log(data);
+                      $( '#tweets' ).html(JSON.stringify(data));
+                  },
+                  error:function(){}
+              });
+
+
+          });
+
+      }
+
+
+  </script><!--加载谷歌地图-->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZrzcF2lys_CtA3bZAzzGu9gcqHDpgsfA&callback=initMap"
+          async defer></script>
+
+
+  </body>
+
+</html>
