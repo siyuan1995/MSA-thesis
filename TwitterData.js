@@ -13,6 +13,7 @@ var params = {
 var params2 = {
     screen_name:'=Tristan Liu',
     count:2
+
 }//////////////////////
 router.get('/', function (req, res, next) {// this one handle the POST method
     T.get('search/tweets', params,(err, data, response)=>{
@@ -27,6 +28,7 @@ router.get('/', function (req, res, next) {// this one handle the POST method
         }*/
 
         res.json(data);
+        console.log('6');
     });
 
     T.get('statuses/user_timeline',params2,(err, data, response)=>{
