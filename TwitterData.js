@@ -4,32 +4,37 @@ var Twit = require('twit'); // this is how we import the twit package
 var config = require('./configure')//this is we import the config file which is a js file which contains the keys ans tokens
 var dataContent;
 var T = new Twit(config); //this is the object of twit which will help us to call functions inside it
-var params = {
-    q: 'weed',
-    count: 10,
-    //geocode:true
-}
+
+
+/*var params = {
+   track:foo,
+
+    geocode:true
+}*/
 
 var params2 = {
-    screen_name:'=Tristan Liu',
-    count:2
+    screen_name:'Toronto Police OPS',
+    count:10
 
-}//////////////////////
+}
+
 router.get('/', function (req, res, next) {// this one handle the POST method
-    T.get('search/tweets', params,(err, data, response)=>{
+    /*T.get('statuses/filter', params,(err, data, response)=>{
 
-        /*for(var i=0;i<data.statuses.length;i++){
+        for(var i=0;i<data.statuses.length;i++){
             if (data.statuses[i].place!=null){
                 console.log('tweet number'+i);
                 console.log(data.statuses[i].text);
 
             }
 
-        }*/
+        }
 
         res.json(data);
-        console.log('6');
+
     });
+*/
+
 
     T.get('statuses/user_timeline',params2,(err, data, response)=>{
         res.json(data);// ERROR: can't set headers after they are sent to the client REASON: means that you're already in the body or finished
