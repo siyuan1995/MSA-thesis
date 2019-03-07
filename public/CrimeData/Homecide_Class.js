@@ -12,4 +12,4 @@ var Crime_Homecide=function (Index,Lat,Longt,Year,Month,Day,Time,Weekday,Divisio
 
 console.log(Crime_event);
 
-module.exports={Homecide_event: Crime_Homecide};
+module.exports={events4crime: Crime_Homecide};

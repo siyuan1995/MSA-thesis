@@ -27,6 +27,12 @@ server.listen(3003);
 var stream=null;
 
 
+io.on('connection', function (socket) {
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+        console.log(data);
+    });
+});
 
 
 
@@ -37,7 +43,7 @@ var stream=null;
 
 //router.get('/', function (req, res, next) {// this one handle the POST method
 
-io.on('connection',function (socket) {// we are not using any ajax request from clients when we are using sockets.
+/*io.on('connection',function (socket) {// we are not using any ajax request from clients when we are using sockets.
     //socket.on('start tweets',function () {
     ///
 
@@ -45,9 +51,9 @@ io.on('connection',function (socket) {// we are not using any ajax request from 
     socket.on('my other event', function (data) {
         console.log('recieve message from html');})
 
-        if (stream === null) {
+       /!* if (stream === null) {
             //socket.emit() works fine here
-         /*   var stream = T.stream('statuses/filter', {locations: place});
+         /!*   var stream = T.stream('statuses/filter', {locations: place});
             stream.on('tweet', function (tweet) {
                 var Longtitude = (tweet.place.bounding_box.coordinates[0][0][0] + tweet.place.bounding_box.coordinates[0][2][0]) / 2;
                 var Latitude = (tweet.place.bounding_box.coordinates[0][0][1] + tweet.place.bounding_box.coordinates[0][1][1]) / 2;
@@ -56,8 +62,8 @@ io.on('connection',function (socket) {// we are not using any ajax request from 
                 socket.broadcast.emit("twitter-stream", Coordinate);
 
 
-            })*/
-         T.stream('statuses/filter',{'locations':'-180,-90,180,90'},function (s) {
+            })*!/
+        /!* T.stream('statuses/filter',{'locations':'-180,-90,180,90'},function (s) {
              stream=s;
 
              stream.on('data',function (data) {
@@ -69,16 +75,16 @@ io.on('connection',function (socket) {// we are not using any ajax request from 
 
              })
 
-         })
+         })*!/
 
 
 
-        }
+        }*!/
 
 
         //})
 
-    })
+    })*/
 
 
 

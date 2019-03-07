@@ -24,7 +24,7 @@ var DayChart=function (data,dom) {
     var path = g.append("path")
         .attr('fill','none')
         .attr('stroke','lightskyblue')
-        .attr('stroke-width',5)
+        .attr('stroke-width',3)
 
 
 
@@ -32,10 +32,33 @@ var DayChart=function (data,dom) {
         .attr("transform", "translate(0," + innerHeight + ")")
         .attr('stroke-width',1)
         .attr('stroke','lightskyblue')
+        //.attr('class','axisBlue');// this place if you want to change the color of axis, you have to set the class, and the class has to be 'axisColor line' and 'axisColor path'
 
     var yAxisG = g.append("g")
         .attr('stroke-width',1)
         .attr('stroke','lightskyblue')
+        //.attr('class','axisBlue');
+
+    var xScale = d3.scaleLinear().range([0, innerWidth]);
+    var yScale = d3.scaleLinear().range([innerHeight, 0]);
+
+    xScale.domain(d3.extent(data, function (d){ return d.Dtime; }));// d3.extent(),returns the minimum and maximum value in the given iterable using natural order
+    yScale.domain(d3.extent(data, function (d){ return d.frequency; }));
+
+    var xAxis = d3.axisBottom(xScale)
+        .ticks(21)
+    //.classed('axisBlue',true)
+    //.attr('class','axisBlue')
+
+
+    var yAxis = d3.axisLeft(yScale)
+        .ticks(11)
+    //.classed('axisBlue',true)
+    //.attr('class','axisBlue')
+
+    xAxisG.call(xAxis);
+    yAxisG.call(yAxis);
+
 
     svg.append("text")
         .attr("transform",
@@ -51,26 +74,32 @@ var DayChart=function (data,dom) {
         .style("text-anchor", "middle")
         .text("Frequency");
 
-    var xScale = d3.scaleLinear().range([0, innerWidth]);
-    var yScale = d3.scaleLinear().range([innerHeight, 0]);
 
-    var xAxis = d3.axisBottom(xScale)
-        .ticks(21)
 
-    var yAxis = d3.axisLeft(yScale)
-        .ticks(11)
+
+
+/*    svg.append("g")
+        .attr("transform", "translate(0," + innerHeight + ")")
+        .call(d3.axisBottom(xScale));
+
+    // Add the Y Axis
+    svg.append("g")
+        .attr("class", "axisRed")
+        .call(d3.axisLeft(yScale));*/
+
+
+
 
     var line = d3.line()
         .x(function(d) { return xScale(d.Dtime); })
         .y(function(d) { return yScale(d.frequency); });
 
 
-    xScale.domain(d3.extent(data, function (d){ return d.Dtime; }));// d3.extent(),returns the minimum and maximum value in the given iterable using natural order
-    yScale.domain(d3.extent(data, function (d){ return d.frequency; }));
 
 
-    xAxisG.call(xAxis);
-    yAxisG.call(yAxis);
+
+
+
 
     path.attr("d", line(data));
 
@@ -88,6 +117,8 @@ var DayChart=function (data,dom) {
         .text(function(d) {
             return d.frequency
         });
+
+
 
 
 

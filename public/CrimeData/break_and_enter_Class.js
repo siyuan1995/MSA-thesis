@@ -12,4 +12,4 @@ var Crime_break=function (Index,Lat,Longt,Year,Month,Day,Time,Weekday,Division,N
 
 console.log(Crime_event);
 
-module.exports={break_event: Crime_break};
+module.exports={events4crime: Crime_break};

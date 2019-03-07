@@ -4,31 +4,7 @@ var Statistics=function (TimeData,WeekData,MonthData,DivisionData,dom) {
 
     d3.select('#statisticTable').remove();
 
-    var i0=0;
-    var i1=0;
-    var i2=0;
-    var i3=0;
-    var i4=0;
-    var i5=0;
-    var i6=0;
-    var i7=0;
-    var i8=0;
-    var i9=0;
-    var i10=0;
-    var i11=0;
-    var i12=0;
-    var i13=0;
-    var i14=0;
-    var i15=0;
-    var i16=0;
-    var i17=0;
-    var i18=0;
-    var i19=0;
-    var i20=0;
-    var i21=0;
-    var i22=0;
-    var i23=0;
-    var i24=0;
+    var i0=0,i1=0,i2=0,i3=0,i4=0,i5=0,i6=0,i7=0,i8=0,i9=0,i10=0,i11=0,i12=0,i13=0,i14=0,i15=0,i16=0,i17=0,i18=0,i19=0,i20=0,i21=0,i22=0,i23=0,i24=0;
 
     for(var p=0;p<TimeData.length;p++) {
         switch (TimeData[p].properties.Time) {//TimeData[p].properties.Time
@@ -136,7 +112,7 @@ var Statistics=function (TimeData,WeekData,MonthData,DivisionData,dom) {
     var minDivision=Math.min(DivisionData.children[0].frequency,DivisionData.children[1].frequency,DivisionData.children[2].frequency,DivisionData.children[3].frequency,DivisionData.children[4].frequency,DivisionData.children[5].frequency,DivisionData.children[6].frequency,DivisionData.children[7].frequency,DivisionData.children[8].frequency,DivisionData.children[9].frequency,DivisionData.children[10].frequency,DivisionData.children[11].frequency,DivisionData.children[12].frequency,DivisionData.children[13].frequency,DivisionData.children[14].frequency,DivisionData.children[15].frequency,DivisionData.children[16].frequency)
     var minDivisionIndex=arrDivision.indexOf(minDivision);
 
-
+    // To get a min value of an array, use Math.min.apply(null,arr), or Math.min(a1,a2,a3...an).
 
 
     var dat4table=[
@@ -148,8 +124,8 @@ var Statistics=function (TimeData,WeekData,MonthData,DivisionData,dom) {
 
     function tabulate(data, columns) {
         var table = d3.select('#'+dom).append('table').attr('id','statisticTable')
-        var thead = table.append('thead').attr('font-size',40);
-        var	tbody = table.append('tbody').attr('font-size',20);
+        var thead = table.append('thead').attr('font-size',80).attr('class','tablehead');
+        var	tbody = table.append('tbody').attr('font-size',40).attr('class','tablebody');
 
         // append the header row
         thead.append('tr')

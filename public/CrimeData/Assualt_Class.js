@@ -14,4 +14,4 @@ Crime_event.call(this,Index,Lat,Longt,Year,Month,Day,Time,Weekday,Division,Neigh
 
 console.log(Crime_event);
 
-module.exports={Assualt_event: Crime_Assualt};
+module.exports={events4crime: Crime_Assualt};

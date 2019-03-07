@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var xlsx=require('xlsx');
-var Assualt_Class=require('../public/CrimeData/Assualt_Class');
-var workbook=xlsx.readFile('C:/Users/User/Desktop/crime data/CrimeData_xlsx/Assult.xlsx');// The ERR that 'fs.readFile is not a function' is because the readFile only works on server side, but this code will be ran at client side
+var read_crime=require('./Read_Crime');
+var Robbery_Class=require('../../public/CrimeData/Robbery_Class');
+var workbook=xlsx.readFile('C:/Users/User/Desktop/crime data/CrimeData_xlsx/Robbery.xlsx');// The ERR that 'fs.readFile is not a function' is because the readFile only works on server side, but this code will be ran at client side
 
 
 /* Find desired cell,the way to get a specific cell is worksheet['row'+'column'] *//*
@@ -14,7 +15,7 @@ router.post('/', function (req, res){
     var first_sheet_name = workbook.SheetNames[0];
     var worksheet = workbook.Sheets[first_sheet_name];
     var arr=[];
-    for(var i=2;i<1000;i++){
+    for(var i=2;i<4000;i++){
         var Lat = worksheet['AA'+i];// if you want to combine strings, 'string'+number works, instead 'string'+'number' doesn't work
         var Long=worksheet['AB'+i];
         var Year=worksheet['Q'+i];
@@ -26,8 +27,8 @@ router.post('/', function (req, res){
         var Neighborhood=worksheet['Z'+i];
         var Index=i-2;
 
-        if(Lat&&Long&&Year&&Month&&Day&&Time&&Weekday&&Division&&Neighborhood){
-            var item=new Assualt_Class.Assualt_event(Index,Long.v,Lat.v,Year.v,Month.v,Day.v,Time.v,Weekday.v,Division.v,Neighborhood.v,'Assualt');
+        if(Lat&&Long&&Year&&Month&&Day&&Time){
+            var item=new Robbery_Class.events4crime(Index,Long.v,Lat.v,Year.v,Month.v,Day.v,Time.v,Weekday.v,Division.v,Neighborhood.v,'Robbery');
             //console.log(item.getJsonData())
             arr.push(item.getJsonData());
         }
@@ -39,6 +40,15 @@ router.post('/', function (req, res){
 
 
 
+/*
+router.post('/', function (req, res) {
+    var arr=read_crime('Robbery_Class','Robbery.xlsx','Robbery')
+    res.send(arr);
+
+
+    }
+)
+*/
 
 
 

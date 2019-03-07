@@ -17,7 +17,9 @@
 }
 
 td, th {
-    padding: 10px 20px;
+    padding: 20px 20px;
+    font-size: 40px;
+    color: #7b82ff;
 }
 
 svg text.label {
@@ -41,3 +43,14 @@ svg text.label {
     border-radius: 8px;
     pointer-events: none;
 }
+
+.axisBlue line{
+    stroke: skyblue;
+}
+
+.axisBlue path{
+    stroke: skyblue;
+}
+
+
+

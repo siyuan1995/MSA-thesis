@@ -1,23 +1,23 @@
 var express = require('express');
 var router = express.Router();
 var xlsx=require('xlsx');
-var Assualt_Class=require('../public/CrimeData/Assualt_Class');
-var break_and_enter_Class=require('../public/CrimeData/break_and_enter_Class');
-var Robbery_Class=require('../public/CrimeData/Robbery_Class');
-var Theft_Over_Class=require('../public/CrimeData/Theft_Over_Class');
+var Assualt_Class=require('../../public/CrimeData/Assualt_Class');
+var break_and_enter_Class=require('../../public/CrimeData/break_and_enter_Class');
+var Robbery_Class=require('../../public/CrimeData/Robbery_Class');
+var Theft_Over_Class=require('../../public/CrimeData/Theft_Over_Class');
 
-var assualt_workbook=xlsx.readFile('C:/Users/User/Desktop/crime data/CrimeData_xlsx/Assult.xlsx');
+/*var assualt_workbook=xlsx.readFile('C:/Users/User/Desktop/crime data/CrimeData_xlsx/Assult.xlsx');
 var break_workbook=xlsx.readFile('C:/Users/User/Desktop/crime data/CrimeData_xlsx/Break_and_enter.xlsx');
 var robbery_workbook=xlsx.readFile('C:/Users/User/Desktop/crime data/CrimeData_xlsx/Robbery.xlsx');
-var theft_workbook=xlsx.readFile('C:/Users/User/Desktop/crime data/CrimeData_xlsx/Theft_Over.xlsx');
+var theft_workbook=xlsx.readFile('C:/Users/User/Desktop/crime data/CrimeData_xlsx/Theft_Over.xlsx');*/
 
 
 
-var assualtC=function(){
+/*var assualtC=function(){
     var assualt_sname = assualt_workbook.SheetNames[0];
     var a_worksheet = assualt_workbook.Sheets[assualt_sname];
     var assualt_arr=[];
-    for(var i=2;i<100;i++){
+    for(var i=2;i<1000;i++){
         var Lat = a_worksheet['AA'+i];// if you want to combine strings, 'string'+number works, instead 'string'+'number' doesn't work
         var Long=a_worksheet['AB'+i];
         var Year=a_worksheet['Q'+i];
@@ -44,7 +44,7 @@ var breakC=function(){
     var break_sname = break_workbook.SheetNames[0];
     var b_worksheet = break_workbook.Sheets[break_sname];
     var break_arr=[];
-    for(var i=2;i<100;i++){
+    for(var i=2;i<1000;i++){
         var Lat = b_worksheet['AA'+i];// if you want to combine strings, 'string'+number works, instead 'string'+'number' doesn't work
         var Long=b_worksheet['AB'+i];
         var Year=b_worksheet['Q'+i];
@@ -100,7 +100,7 @@ var theftC=function(){
     var t_sname = theft_workbook.SheetNames[0];
     var t_worksheet = theft_workbook.Sheets[t_sname];
     var theft_arr=[];
-    for(var i=2;i<100;i++){
+    for(var i=2;i<1000;i++){
         var Lat = t_worksheet['AA'+i];// if you want to combine strings, 'string'+number works, instead 'string'+'number' doesn't work
         var Long=t_worksheet['AB'+i];
         var Year=t_worksheet['Q'+i];
@@ -120,22 +120,25 @@ var theftC=function(){
 
     }
     return theft_arr;
-}
+}*/
 
 router.post('/', function (req, res){
 
-var assualt_arr=assualtC();
+/*var assualt_arr=assualtC();
 var break_arr=breakC();
 var robbery_arr=robberyC();
-var theft_arr=theftC();
+var theft_arr=theftC();*/
 
+/*
 var Crime_arr=[{name:'assualt_arr',values:assualt_arr},{name:'break_arr',values:break_arr},{name:'robbery_arr',values:robbery_arr},{name:'theft_arr',values:theft_arr}];
+*/
 
 
 
 
 
-    res.send(Crime_arr);}
+    //res.set('Cache-Control', 'public, max-age=31557600');
+    res.send('Crime_arr');}
 
 )
 

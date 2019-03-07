@@ -24,10 +24,12 @@ var WeekChart=function (data,dom) {
         .attr("transform", "translate(0," + innerHeight + ")")
         .attr('stroke-width',1)
         .attr('stroke','lightskyblue')
+        .attr('class','axisBlue');
 
     var yAxisG = g.append("g")
         .attr('stroke-width',1)
         .attr('stroke','lightskyblue')
+        .attr('class','axisBlue');
 
     var xScale = d3.scaleBand()
         .range([0, innerWidth])
@@ -88,7 +90,7 @@ var WeekChart=function (data,dom) {
         .attr("class","label")
         .attr("x", (function(d) { return xScale(d.Weekday)+62; }  ))
         .attr("y", function(d) {
-        console.log(yScale(d.frequency));
+        //console.log(yScale(d.frequency));
             return yScale(d.frequency)+10;
         })
         .attr("dy", ".75em")
@@ -96,34 +98,5 @@ var WeekChart=function (data,dom) {
 
 
 
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 module.exports=WeekChart;

@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var xlsx=require('xlsx');
-var Homecide_Class=require('../public/CrimeData/Homecide_Class');
+var read_crime=require('./Read_Crime');
+var Homecide_Class=require('../../public/CrimeData/Homecide_Class');
 var workbook=xlsx.readFile('C:/Users/User/Desktop/crime data/CrimeData_xlsx/Homecide.xlsx');// The ERR that 'fs.readFile is not a function' is because the readFile only works on server side, but this code will be ran at client side
 
 
@@ -11,10 +12,11 @@ var workbook=xlsx.readFile('C:/Users/User/Desktop/crime data/CrimeData_xlsx/Home
 /* Get the value. After get the specific cell, the value of the cell is cell.v */
 
 router.post('/', function (req, res){
+    console.log('get in Read_Homecide');
     var first_sheet_name = workbook.SheetNames[0];
     var worksheet = workbook.Sheets[first_sheet_name];
     var arr=[];
-    for(var i=2;i<1000;i++){
+    for(var i=2;i<900;i++){
         var Lat = worksheet['K'+i];// if you want to combine strings, 'string'+number works, instead 'string'+'number' doesn't work
         var Long=worksheet['L'+i];
         var Year=worksheet['E'+i];
@@ -40,26 +42,38 @@ router.post('/', function (req, res){
         else if(Month.v==12){Month.v='December'}
 
         if(Lat&&Long&&Year&&Month&&Day&&Time){
-            var item=new Homecide_Class.Homecide_event(Index,Long.v,Lat.v,Year.v,Month.v,Day.v,Time.v,Weekday.v,Division.v,Neighborhood.v,'Homecide');
+            var item=new Homecide_Class.events4crime(Index,Long.v,Lat.v,Year.v,Month.v,Day.v,Time.v,Weekday.v,Division.v,Neighborhood.v,'Homecide');
             //console.log(item.getJsonData())
             arr.push(item.getJsonData());
         }
 
     }
-    res.send(arr);}
+
+
+   res.send(arr);}
 
 )
 
 
 
 
+/*
+router.post('/', function (req, res) {
+    var arr=read_crime('Homecide_Class','Homecide.xlsx','Homecide')
+    res.send(arr);
+
+
+    }
+)*/
 
 
 
 
 
 
-//module.exports={Assualt_Data:arr};
+
+
+
 module.exports=router;// if you make module.exports={router}, then the export stuff is a object, but if you want to make the router work, ii has to be a router without {}.
 
 

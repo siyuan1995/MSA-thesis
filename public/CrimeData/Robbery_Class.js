@@ -12,4 +12,4 @@ var Crime_Robbery=function (Index,Lat,Longt,Year,Month,Day,Time,Weekday,Division
 
 console.log(Crime_event);
 
-module.exports={Robbery_event: Crime_Robbery};
+module.exports={events4crime: Crime_Robbery};

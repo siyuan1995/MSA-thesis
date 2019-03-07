@@ -25,11 +25,6 @@ for(var i=2;i<6;i++){
 }*/
 
 
-
-
-
-
-
 var TimeDataToCSV=function (data) {
     var i0=0;
     var i1=0;

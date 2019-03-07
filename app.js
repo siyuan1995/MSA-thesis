@@ -9,37 +9,52 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var bodyParser = require('body-parser');
-var Coords = require('./routes/Coords');
-//////////////////////////////////////////////////////// Routers for crime data
-var Read_Assualt=require('./routes/Read_Assualt');
-var Read_break=require('./routes/Read_break');
-var Read_Homecide=require('./routes/Read_Homecide');
-var Read_Robbery=require('./routes/Read_Robbery');
-var Read_Theft=require('./routes/Read_Theft');
-var TContent=require('./SearchTweets');
-var Read_All=require('./routes/Read_All');
-//////////////////////////////////////////////////////////
+
+
+
+
 var app = express();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
 
-app.listen(3000);// One way to pass app instance is the 'circular dependency', but it is suggested to avoid it. !!!!SOCKET.IO PART IMPORTANT!!!
-//server.listen(3000)// This place if you want to use the same port with app.js and socket.io, you could either 1.USE socket.io in app.js or 2.PASS app instance to Twitterstream File and then use socket.io
-/*
-io.on('connection',function (socket) {
-    console.log('connected');
+app.use(bodyParser.json({limit:'50mb'}));
+app.use(bodyParser.urlencoded({limit:'50mb', extended: true, parameterLimit:50000} ));
+//app.use(bodyParser.json({limit:1024*1024*500}));
 
+
+var cors = require('cors')
+//////////////////////////////////////////////////////// Routers for crime data
+var Read_Assualt=require('./routes/Read/Read_Assualt');
+var Read_break=require('./routes/Read/Read_break');
+var Read_Homecide=require('./routes/Read/Read_Homecide');
+var Read_Robbery=require('./routes/Read/Read_Robbery');
+var Read_Theft=require('./routes/Read/Read_Theft');
+var TContent=require('./SearchTweets');
+var Read_All=require('./routes/Read/Read_All');
+var Morans_I=require('./routes/Spatial_analyzation/SpatialWeight_Moran');
+var spatial_correlation=require('./routes/Spatial_analyzation/Spatial_Correlation');
+var get_Mean_Center=require('./routes/Spatial_analyzation/Mean_Center');
+var standard_ellipse=require('./routes/Spatial_analyzation/standard_ellipse');
+
+//////////////////////////////////////////////////////////
+
+
+
+var socket=require('socket.io')
+var server=app.listen(3000);// This place solved the problem that THE SOCKET.IO ADN APP USE THE SAME PORT.
+var io=socket(server);
+    io.on('connection',function (socket) {
+    console.log('socket connected');
     socket.emit('news', {hello: 'world'});
        socket.on('my other event', function (data) {
            console.log('2');})
 
-})*/
+});
 
 
 
-
-
-
+app.use(cors());
+app.get('/products/:id', function (req, res, next) {
+    res.json({msg: 'This is CORS-enabled for all origins!'})
+})
 app.get('/sample',function(req, res) {
     res.send('this is a sample!');}
 )
@@ -57,7 +72,7 @@ app.use('/users', usersRouter);
 
 
 app.get('/public',)
-app.use('/Coords', Coords);// the path of app.use is the path fo req from client
+//app.use('/Coords', Coords);// the path of app.use is the path fo req from client
 ///////////////////////////////////////////////////
 app.use('/Read_Assualt',Read_Assualt);
 app.use('/Read_break',Read_break);
@@ -65,15 +80,15 @@ app.use('/Read_Homecide',Read_Homecide);
 app.use('/Read_Robbery',Read_Robbery);
 app.use('/Read_Theft',Read_Theft);
 app.use('/Read_All',Read_All);
+app.use('/SpatialWeight_Moran',Morans_I);
+app.use('/Spatial_Correlation',spatial_correlation);
+app.use('/Mean_Center',get_Mean_Center);
+app.use('/Standard_ellipse',standard_ellipse);
+
 
 app.use('/TweetContent',TContent);
-var data=Coords.data;
 
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }))
-
-console.log('3000');
+console.log('app.js is executed');
 
 
 
