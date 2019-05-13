@@ -31,9 +31,6 @@ var StackbarChart=function(assualt_arr,break_arr,robbery_arr,theft_arr,dom){
     var stack=d3.stack().keys(['assualt','break_enter','robbery','theft']);
 
     var series=stack(dataset);
-    console.log(dataset);
-    console.log(series);
-
 
     var xScale = d3.scaleBand()
         .domain(d3.range(dataset.length))

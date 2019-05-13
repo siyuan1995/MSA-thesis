@@ -2,22 +2,21 @@
 <html>
   <head>
 
-    <title>Social Media Dashboard</title>
+    <title>Crime Prediction Dashboard</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/1.css">
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="locationfilter.css" />
 
     <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
 
-<!--      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
-            integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
-            crossorigin=""/>
-      <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
-              integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
-              crossorigin=""></script>-->
+
+
+
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
           integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
@@ -28,12 +27,18 @@
     <script src="leaflet.textpath.js"></script>
     <script src="l.ellipse.js"></script>
 
+    <script src="https://unpkg.com/shp-write@latest/shpwrite.js"></script>
 
 
-      <!--<script src="/public/ leaflet-providers.js"></script>-->
-      <!--<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-      <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
-      <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw-src.css" />
+    <!-- call leaflet-draw.js after leaflet, the leaflet-draw is depend on the leaflet, otherwise it give err 'L is not defined' or 'L.Control.draw is not defined'-->
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw-src.js"></script>
+
+
 
 
 
@@ -46,9 +51,6 @@
      }
     </style>
 
-
- 
-
   </head>
 
 
@@ -57,11 +59,9 @@
 
 
 
-
-
   <div style="background-color: #212121" >
     <span data-feather="home" style="color: #303030"> </span>
-    <a style="font-size: 40px">&nbsp;Social Media Dashboard</a>
+    <a style="font-size: 40px">&nbsp;Crime Prediction Dashboard</a>
   </div><!--标题部分-->
 
   <div class="container-fluid" style="background-color: #212121" >
@@ -70,6 +70,7 @@
       <nav class="col-md-2 d-none d-md-block bg-light sidebar">
         <div class="sidebar-sticky" >
           <ul class="nav flex-column">
+
 
             <li class="nav-item" style="background-color: #303030">
               <a class="nav-link active" href="#" id="assualt_section" style="background-color: #212121">
@@ -134,6 +135,30 @@
                 Standard division ellipse
               </a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" id="Getis_ord" href="#" style="background-color: #212121">
+                 <span data-feather="file-text"></span>
+                  DBSCAN
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" id="rectSelect" href="#" style="background-color: #212121">
+                <span data-feather="file-text"></span><!--<button id="rectSelect" value="recSelect">rectangle select</button>-->
+                Rectangle select
+              </a>
+            </li>
+
+            <li class="nav-item"><!--This place is for allowing user to upload their local file to the server and do analysis-->
+                <form action="/uploadfile" enctype="multipart/form-data" id="ajax-contact" method="POST"  target="nm_iframe" ><!--use ajax call in a form-->
+                  <!--the action here is the path after http://localhost:port number  In this case the path is http://localhost:3000/uploadfile-->
+                      <input type="file" id="local_upload" name="local_input"><!--the name attributes is used to reference elements in a Javascript, so it is like an id that you can reach the element by this name attribute-->
+                      <input type="submit" value="submit_button" id="submit" name="submit_bt">
+                </form>
+              <iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+            </li>
+
+
           </ul><!--ul是无序列表-->
         </div>
       </nav><!--side bar-->
@@ -340,160 +365,28 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
   </script><!--这地方如果用jquery-3.3.1-slim.min.js的话就会造成$.ajax is not a function 的错误，所有不要用slim版本/ 如何引用本地的-->
   <script src="/socket.io-client/dist/socket.io.js"></script>
+  <script src="leaflet-routing-machine.js"></script>
+  <script src="locationfilter.js"></script>
+
+
+
+
+  <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+          integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+          crossorigin=""></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw-src.js"></script>
+
+
 
   <!-- Bootstrap core JavaScript
   ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
 
-
   <script src="/bundle.js"></script>
 
  <!-- <script src="/Tweets.js"></script>-->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- <!-- <script type="text/javascript">
-      var map;
-      var rectangle;
-      var infoWindow;
-      var $=jQuery.noConflict();
-
-
-      function initMap() {
-          map = new google.maps.Map(document.getElementById('map'), {
-              center: {lat: +43.6532, lng: -79.3832},
-              zoom: 8
-          });
-
-          var bounds={north:44,south:43,east:-79,west:-80};
-          rectangle = new google.maps.Rectangle({
-              bounds: bounds,
-              editable: true,
-              draggable: true
-          });
-          rectangle.setMap(map);
-          infoWindow = new google.maps.InfoWindow();
-          rectangle.addListener('bounds_changed',()=>{
-              var ne;
-              var sw;
-
-               ne = rectangle.getBounds().getNorthEast();
-               sw = rectangle.getBounds().getSouthWest();
-
-              var contentString = '<b>Rectangle moved.</b><br>' +
-                  'New north-east corner: ' + ne.lat() + ', ' + ne.lng() + '<br>' +
-                  'New south-west corner: ' + sw.lat() + ', ' + sw.lng();
-
-              // Set the info window's content and position.
-              infoWindow.setContent(contentString);
-              infoWindow.setPosition(ne);
-              infoWindow.open(map);
-                //console.log($.ajax);
-
-
-              /*$.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
-                  async : false,
-                  cache : false,
-                  type : 'POST',
-                  url:'/Coords', // the path here is like you give the name for the link. specifies the URL to send the request to. Default is the
-                  //current page. AND THIS STEP EQUALS TO SEND A REQUEST TO THE PATH '/Coords'
-                  datatype:'json',
-                  data:{
-                      top:ne.lng,
-                      right:ne.lat,
-                      bottom:sw.lng,
-                      left:sw.lat
-
-                  },
-                  success:function(data){
-                      console.log('success');
-                        //$( '#tweets' ).html(data);
-                  },
-                  error:function(){}
-              });*/
-
-
-              /*$.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
-                  async : false,
-                  cache : false,
-                  type : 'GET',
-                  url:'/TweetContent', // the path here is like you give the name for the link. specifies the URL to send the request to. Default is the
-                  //current page. AND THIS STEP EQUALS TO SEND A REQUEST TO THE PATH '/Coords'
-                  datatype:'json',
-                  success:function(data){
-                      console.log(data);
-                      //$( '#tweets' ).html(JSON.stringify(data));
-                  },
-                  error:function(){}
-              });*/
-
-              var heatmap;
-              var liveTweets = new google.maps.MVCArray();
-              var heatmap = new google.maps.visualization.HeatmapLayer({
-                  data: liveTweets,
-                  radius: 25
-              });
-              heatmap.setMap(map);
-
-              if(io!== undefined){
-                  var socket = io.connect('http://localhost:3003',{reconnect:true});// ATTENTION: this place the Chinese and English versin of ':' has a big difference, it return 404 error when using chinese version.
-                  ///
-
-                  socket.on('news', function (data) {
-                      console.log('recieve message from server  ');
-                      socket.emit('my other event', { my: 'data' });
-
-                  });
-
-
-
-                  socket.on('twitter-stream',function (data) {
-                      console.log('twitter data received');
-                      var tweetLocation = new google.maps.LatLng(data.lng,data.lat);
-                      liveTweets.push(tweetLocation);
-
-                      var image = "../public/images/small-dot-icon.png";
-                      var marker = new google.maps.Marker({
-                          position: tweetLocation,
-                          map: map,
-                          icon: image
-                      });
-
-                      setTimeout(function(){
-                          marker.setMap(null);
-                      },600);
-
-                      socket.on('connected',function (r) {
-                          socket.emit('start tweets');
-                      })
-
-
-                  })
-
-              }
-
-
-          });
-
-
-
-      }
-
-
-  </script>&lt;!&ndash;加载谷歌地图&ndash;&gt;
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZrzcF2lys_CtA3bZAzzGu9gcqHDpgsfA&callback=initMap&libraries=visualization"
-          async defer></script>--><!--Google map operations-->
 
   <!--// to make the dependencies saved in the pack.json, you have to run &#45;&#45;save under the path of package.json-->
 

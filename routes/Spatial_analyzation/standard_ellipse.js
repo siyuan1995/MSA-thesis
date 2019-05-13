@@ -8,16 +8,16 @@ var crime_data;
 router.post('/', function (req,res) {
     switch (req.body.crime_type){
         case'assualt':
-            crime_data=read_crime('Assualt_Class','Assult.xlsx','Assualt');
+            crime_data=read_crime('Assualt_Class','Assult.xlsx','Assualt',4000);
             break;
         case'break':
-            crime_data=read_crime('break_and_enter_Class','Break_and_enter.xlsx','break_and_enter');
+            crime_data=read_crime('break_and_enter_Class','Break_and_enter.xlsx','break_and_enter',4000);
             break;
         case'robbery':
-            crime_data=read_crime('Robbery_Class','Robbery.xlsx','Robbery');
+            crime_data=read_crime('Robbery_Class','Robbery.xlsx','Robbery',4000);
             break;
         case'theft':
-            crime_data=read_crime('Theft_Over_Class','Theft_Over.xlsx','Theft_Over');
+            crime_data=read_crime('Theft_Over_Class','Theft_Over.xlsx','Theft_Over',4000);
             break;
 
     }

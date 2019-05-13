@@ -2,10 +2,10 @@ var Visualize_Mean_Center=function (data,mymap,plineGroup) {
 
     //  var plineGroup=L.layerGroup([]);
     var pline=[
-        new L.LatLng(data[0].yMean,data[0].xMean),
-        new L.LatLng(data[1].yMean,data[1].xMean),
-        new L.LatLng(data[2].yMean,data[2].xMean),
-        new L.LatLng(data[3].yMean,data[3].xMean),
+        new L.LatLng(data[0].xMean,data[0].yMean),
+        new L.LatLng(data[1].xMean,data[1].yMean),
+        new L.LatLng(data[2].xMean,data[2].yMean),
+        new L.LatLng(data[3].xMean,data[3].yMean),
 
     ];
     var plineOptions={color:'blue',weight:10};

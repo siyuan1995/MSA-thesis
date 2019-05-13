@@ -34,6 +34,8 @@ router.post('/', function (req, res){
         }
 
     }
+
+
     res.send(arr);
    /*var arr=read_crime('Assualt_Class','Assult.xlsx','Assualt')
     res.send(arr);*/}

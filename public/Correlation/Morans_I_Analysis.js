@@ -1,13 +1,15 @@
-//var xlsx=require('xlsx');
 
 var Moran_Indicator=function (crime_data,SpatialWeight_workbook) {
     var first_sheet_name = SpatialWeight_workbook.SheetNames[0];
     var worksheet = SpatialWeight_workbook.Sheets[first_sheet_name];
+    console.log(worksheet);
 
     var N=crime_data.children.length;
     var S0=68;//EiEjWij
     var sumZ=0;
+    var sumZ4=0;
     var sum=0;
+    var A=0,B=0,C=0,D=0,EI=0,EI2=0,S1=0,S2=0,VI=0,Z=0;
 
     for(let i=0;i<crime_data.children.length;i++){
 
@@ -20,6 +22,10 @@ var Moran_Indicator=function (crime_data,SpatialWeight_workbook) {
     for(let i=0;i<crime_data.children.length;i++){
         sumZ=sumZ+Math.pow((crime_data.children[i].frequency-X_mean),2);
     }//Ei(Xi-Xba)2
+
+    for(let i=0;i<crime_data.children.length;i++){
+        sumZ4=sumZ4+Math.pow((crime_data.children[i].frequency-X_mean),4);
+    }
 
     var DD=[];
     for(let i=0;i<crime_data.children.length;i++){
@@ -95,7 +101,39 @@ var Moran_Indicator=function (crime_data,SpatialWeight_workbook) {
     }
 
     var Moran_indicator=N/68*EiEjWij/sumZ;
-    console.log(Moran_indicator);
+
+    A=N*((Math.pow(N,2)-3*N+3)*S1-N*S2+3*Math.pow(S0,2));
+    D=sumZ4/Math.pow(sumZ,2);
+    B=D*((Math.pow(N,2)-N)*S1-2*N*S2+6*Math.pow(S0,2));
+    C=(N-1)*(N-2)*(N-3)*Math.pow(S0,2);
+    EI=-1/(N-1);
+    EI2=(A-B)/C;
+    S1=68*2;
+    S2=Math.pow(8,2)+Math.pow(12,2)+Math.pow(10,2)+Math.pow(8,2)+Math.pow(6,2)+Math.pow(6,2)+Math.pow(14,2)+Math.pow(8,2)+Math.pow(6,2)
+        +Math.pow(6,2)+Math.pow(6,2)+Math.pow(6,2)+Math.pow(10,2)+Math.pow(10,2)+Math.pow(10,2)+Math.pow(6,2)+Math.pow(4,2);
+    VI=Math.sqrt(EI2-Math.pow(EI,2));
+
+    Z=(Moran_indicator-EI)/VI;
+
+
+
+
+    console.log('MoranI I:'+Moran_indicator);
+    console.log('Z score:'+Z);
+    console.log('EI:'+EI);
+    console.log('VI:'+VI);
+    console.log('A:'+A);
+    console.log('B:'+B);
+    console.log('C:'+C);
+    console.log('D:'+D);
+    console.log('S2:'+S2);
+    console.log('EI2:'+EI2)
+    console.log('EI2-Math.pow(EI,2):'+  (Math.sqrt(EI2-Math.pow(EI,2))))
+
+
+    return JSON.stringify({Morans_I_indictor:Moran_indicator,Z_score:Z});
+
+
 
 
 }

@@ -97,10 +97,6 @@ var DayChart=function (data,dom) {
 
 
 
-
-
-
-
     path.attr("d", line(data));
 
     svg.append("g").selectAll(".text")

@@ -1,11 +1,11 @@
-var read_crime=function (crime_class_name,crime_path,crime_name)  {
+var read_crime=function (crime_class_name,crime_path,crime_name,num)  {
     var xlsx=require('xlsx');
     var Crime_class=require('../../public/CrimeData/'+crime_class_name);
     var workbook=xlsx.readFile('C:/Users/User/Desktop/crime data/CrimeData_xlsx/'+crime_path);
     var first_sheet_name = workbook.SheetNames[0];
     var worksheet = workbook.Sheets[first_sheet_name];
     var arr=[];
-    for(var i=2;i<4000;i++){
+    for(var i=2;i<num;i++){
         var Lat = worksheet['AA'+i];// if you want to combine strings, 'string'+number works, instead 'string'+'number' doesn't work
         var Long=worksheet['AB'+i];
         var Year=worksheet['Q'+i];

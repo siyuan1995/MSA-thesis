@@ -3,6 +3,8 @@ var Upper=require('assert');
 var a=require('atob');*/
 
 var $=jQuery.noConflict();
+
+
 /*$.ajaxPrefilter(function (options, originalOptions, jqXHR) {
     if (options.cache) {
         var success = originalOptions.success || $.noop,
@@ -51,32 +53,6 @@ var Visualize_Mean_Center=require('../routes/Spatial_analyzation/visualize_Mean_
 var Visualize_ellipse=require('../routes/Spatial_analyzation/visualize_ellipse');
 
 
-var Index4Analysis;
-
-//var TwitterApproach=require('../SearchTweets');
-//(TwitterApproach());// immediately invoked function, format is (function());
-
-
-
-
-var mymap = L.map('map').setView([43.6532, -79.3832], 13);
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 17,
-    id: 'mapbox.streets',
-    accessToken: 'pk.eyJ1IjoidHJpc3RhbjE5OTUiLCJhIjoiY2pvamhocHoxMDA4dTNrb2dva2dlYmQwYyJ9.wCtGhSIHYl5qxH9jLXNxaA'
-}).addTo(mymap);
-
-/*var Thunderforest_TransportDark = L.tileLayer('https://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey={apikey}', {
-    attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    apikey: '<your apikey>',
-
-    maxZoom: 17
-});*/ //dark theme try it later.
-
-
-
-
 
 var assult_section=document.getElementById('assualt_section');
 var breakEnter_section=document.getElementById('break_and_enter');
@@ -88,6 +64,10 @@ var Morans_I_section=document.getElementById('Morans_I');
 var Spatial_Correlation=document.getElementById('spatial_correlation');
 var Mean_Center=document.getElementById('mean_center');
 var Standard_ellipse=document.getElementById('standard_ellipse');
+var Getis_ord=document.getElementById('Getis_ord');
+var rectangleSelect=document.getElementById('rectangleSelect');
+
+
 
 //var DayChartDom=document.getElementById('DayChart');
 var All_Data4Statistics;
@@ -97,15 +77,8 @@ var Homecide_data4Correlation;
 var Robbery_data4Correlation;
 var Theft_data4Correlation;
 
-var m=L.geoJSON().addTo(mymap);// the layer that have all the points and it used to be renewed everytime the page is loaded.
-//var polyline=L.polyline([]);
-var plineGroup=L.layerGroup();
-var pellipseGroup=L.layerGroup();
 
-
-
-//global variables to make the read all run faster, I know too many global variables make the variables pollution, but this is for the convinence of
-// not reading from file every time, don't know if this solve the problem.
+//global variables to make the read all run faster, I know too many global variables make the variables pollution, but this is for the convinence of not reading from file every time, don't know if this solve the problem.
 var data_for_chart_ass;
 var Weekday_for_chart_ass;
 var Month_for_chart_ass;
@@ -128,14 +101,210 @@ var Divison_for_chart_th;
 
 
 
+//var TwitterApproach=require('../SearchTweets');
+//(TwitterApproach());// immediately invoked function, format is (function());
+
+var Index4Analysis;// the Index for checking what is the current crime type and the data showed on the map
+var mymap = L.map('map').setView([43.6532, -79.3832], 13);// create the base map for the whole object
+var mylayer=L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 17,
+    id: 'mapbox.streets',
+    accessToken: 'pk.eyJ1IjoidHJpc3RhbjE5OTUiLCJhIjoiY2pvamhocHoxMDA4dTNrb2dva2dlYmQwYyJ9.wCtGhSIHYl5qxH9jLXNxaA'
+}).addTo(mymap);// Add the base layer for the whole project
+var m=L.geoJSON().addTo(mymap);// the layer that have all the points and it used to be renewed everytime the page is loaded.
+
+
+/*L.esri.basemapLayer("Topographic").addTo(mymap);
+var gpService = L.esri.GP.service({
+    url: "https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Network/ESRI_DriveTime_US/GPServer/CreateDriveTimePolygons",
+    useCors:false
+});
+if(L.esri.heat){
+    console.log('barrier is available')
+}*/
+
+//////////
+
+
+//pline group
+var plineGroup=L.layerGroup();
+var pellipseGroup=L.layerGroup();
+
+//route control
+/*var routeControl=L.Routing.control({
+    waypoints: [
+        L.latLng(43.6532, -79.3832),
+        L.latLng(43.8, -79.3832)
+    ],
+    routeWhileDragging: true,
+    //geocoder: L.Control.Geocoder.nominatim()
+});
+routeControl.on('routeselected',function (e)
+    {
+        var route=e.route;
+        for(var i=0;i<route.coordinates.length;i++){
+
+        }
+
+    }
+)
+routeControl.addTo(mymap);*/
+
+
+//define ajax instance
+
+var assualtVisua;
+var breakVisua;
+var homecideVisua;
+var robberyVisua;
+var theftvisua;
+var allVisua;
+
+//rectangle select
+var editableLayers = L.featureGroup();
+mymap.addLayer(editableLayers);
+var drawControl = new L.Control.Draw({
+    edit: {
+        featureGroup: editableLayers
+    }
+});
+mymap.addControl(drawControl);
+var sR=L.rectangle([
+    [43.65,-79.35],[43.67,-79.4]
+],{draggable:true});
+$('#rectSelect').click(function () {
+        sR.addTo(editableLayers);
+    }
+)
+var bounds;
+
+sR.on('edit',function (e) {
+    console.log(sR.getLatLngs());
+    bounds=sR.getLatLngs();
+    switch (Index4Analysis){
+        case'assualt':
+            console.log(Index4Analysis);
+
+            assualtVisua();
+            break;
+        case'break':
+
+            breakVisua();
+            break;
+        case'robbery':
+
+            robberyVisua();
+            break;
+        case'theft':
+
+            theftvisua();
+            break;
+        case 'all':
+            alert('rectangle select is now not available for multiple data')
+
+            //allVisua();
+            break;
+        case 'homecide':
+
+            homecideVisua();
+            break;
+
+
+    }
+
+   /* $.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
+        async : false,
+        cache : false, //cache control doesn't work on ajax request, so the other option is to use local storage.
+        type : 'POST',
+        url:'/Read_Assualt', // the path here is like you give the name for the link. specifies the URL to send the request to. Default is the
+        //current page. AND THIS STEP EQUALS TO SEND A REQUEST TO THE PATH '/Coords'
+        dataType:'json',
+        data:{
+
+
+        },
+        success:function(data1){
+            var data=dataFilter(data1,bounds);
+            console.log('datafilter 2');
+            console.log(data);
+            Assualt_data=data;
+            All_Data4Statistics=data;
+            Assualt_data4Correlation=data;
+
+
+
+            data_for_chart_ass=DataToCSV(Assualt_data);
+            //console.log(data_for_chart);
+            DayChart(data_for_chart_ass,'DayChart');
+
+            Weekday_for_chart_ass=WeekDataToCSV(data);
+            //console.log(Weekday_for_chart);
+            WeekChart(Weekday_for_chart_ass,'WeekChart');
+
+            Month_for_chart_ass=MonthDataToCSV(data);
+            //console.log(Month_for_chart);
+            MonthChart(Month_for_chart_ass,'MonthChart');
+
+            Divison_for_chart_ass=DivisonDataToCSV(data);
+            //console.log(Divison_for_chart_ass);
+            DivisonChart(Divison_for_chart_ass,'DivisonChart');
+
+            Statistic(Assualt_data,Weekday_for_chart_ass,Month_for_chart_ass,Divison_for_chart_ass,'statisticsDom',0);// 0 here is to distingiush single data and multiple data
+
+            //Morans_I_Caculation(Divison_for_chart_ass);
+
+
+        },
+        error:function(){}
+    })*/
+
+
+})
+
+var dataFilter=function(data,bounds){
+    if(bounds)
+    {
+        console.log('datafilter 1')
+        var newData=[];
+
+        for(var i=0;i<data.length;i++){
+
+           if(Math.abs(bounds[0][2].lng)<Math.abs(data[i].geometry.coordinates[0])&&Math.abs(data[i].geometry.coordinates[0])<Math.abs(bounds[0][0].lng)&&Math.abs(bounds[0][0].lat)<Math.abs(data[i].geometry.coordinates[1])&&Math.abs(data[i].geometry.coordinates[1])<Math.abs(bounds[0][1].lat))
+           {
+
+               newData.push(data[i]);
+
+           }
+
+           else{
+               console.log('not qualified')
+           }
+
+        }
+
+        return newData;
+    }
+    else
+    {
+        console.log('datafilter 0');
+        return data
+    }
+};
+
+//////////////////////////////
+
+
+
+
+
+
 assult_section.onclick=function () {
 
-    //mymap.removeLayer(m);
+
     plineGroup.eachLayer(function (layer) {
         layer.remove();
     })// 简单粗暴 put all the objects in layerGroup and delete all of them by eachLayer method when reload the page.
-
-
 
     var Assualt_data;
     Index4Analysis='assualt';
@@ -144,10 +313,8 @@ assult_section.onclick=function () {
     var Month_for_chart;
     var Divison_for_chart;*/
 
-
-
-
-$.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
+    bounds=null;
+    assualtVisua=function(){$.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
              async : false,
              cache : false, //cache control doesn't work on ajax request, so the other option is to use local storage.
              type : 'POST',
@@ -158,15 +325,15 @@ $.ajax({// 这地方不能直接html和后台进行交流，必须通过router, 
 
 
              },
-             success:function(data){
-                 //console.log(data);
+             success:function(data1){
+                 var data=dataFilter(data1,bounds);
+                 console.log('datafilter 2');
+                 console.log(data1);
                  Assualt_data=data;
                  All_Data4Statistics=data;
                  Assualt_data4Correlation=data;
 
-                 console.log(Assualt_data4Correlation);
-                 console.log('Assualt_data4Correlation');
-                 //console.log(Assualt_data4Correlation);
+
 
                  data_for_chart_ass=DataToCSV(Assualt_data);
                  //console.log(data_for_chart);
@@ -184,20 +351,19 @@ $.ajax({// 这地方不能直接html和后台进行交流，必须通过router, 
                  //console.log(Divison_for_chart_ass);
                  DivisonChart(Divison_for_chart_ass,'DivisonChart');
 
-                 Statistic(Assualt_data,Weekday_for_chart_ass,Month_for_chart_ass,Divison_for_chart_ass,'statisticsDom');
+                 Statistic(Assualt_data,Weekday_for_chart_ass,Month_for_chart_ass,Divison_for_chart_ass,'statisticsDom',0);// 0 here is to distingiush single data and multiple data
 
                  //Morans_I_Caculation(Divison_for_chart_ass);
 
 
              },
              error:function(){}
-         })
+         })};
+    assualtVisua();
 
-   /* mymap.removeLayer(delLayer);
-    var delLayer;*/
 
     var geojsonMarkerOptions = {
-        radius: 2,
+        radius:8,
         fillColor: "#ff7800",
         color: "#000",
         weight: 1,
@@ -225,8 +391,6 @@ $.ajax({// 这地方不能直接html和后台进行交流，必须通过router, 
 
 
 
-
-
 }
 
 breakEnter_section.onclick=function () {
@@ -249,8 +413,8 @@ breakEnter_section.onclick=function () {
     var Weekday_for_chart;
     var Month_for_chart;
     var Divison_for_chart;*/
-
-    $.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
+    bounds=null;
+    breakVisua=function(){$.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
         async : false,
         cache : false,
         type : 'POST',
@@ -261,7 +425,8 @@ breakEnter_section.onclick=function () {
 
 
         },
-        success:function(data){
+        success:function(data1){
+            data=dataFilter(data1,bounds)
             breakEnter=data;
             Break_data4Correlation=data;
             data_for_chart_br=DataToCSV(breakEnter);
@@ -280,11 +445,12 @@ breakEnter_section.onclick=function () {
             //console.log(Divison_for_chart);
             DivisonChart(Divison_for_chart_br,'DivisonChart');
 
-            Statistic(breakEnter,Weekday_for_chart_br,Month_for_chart_br,Divison_for_chart_br,'statisticsDom');
+            Statistic(breakEnter,Weekday_for_chart_br,Month_for_chart_br,Divison_for_chart_br,'statisticsDom',0);
 
         },
         error:function(){}
-    })
+    })};
+    breakVisua();
 
 
 
@@ -339,10 +505,10 @@ Homecide_section.onclick=function () {
     var Month_for_chart;
     var Divison_for_chart;
 
-    Index4Analysis='assualt';
+    Index4Analysis='homecide';
 
-
-    $.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
+    bounds=null;
+    homecideVisua=function (){$.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
         async : false,
         cache : false,
         type : 'POST',
@@ -353,7 +519,8 @@ Homecide_section.onclick=function () {
 
 
         },
-        success:function(data){
+        success:function(data1){
+            data=dataFilter(data1);
             Homecide_data=data;
             Homecide_data4Correlation=data;
 
@@ -375,11 +542,12 @@ Homecide_section.onclick=function () {
             //console.log(Divison_for_chart);
             DivisonChart(Divison_for_chart,'DivisonChart');
 
-            Statistic(Homecide_data,Weekday_for_chart,Month_for_chart,Divison_for_chart,'statisticsDom');
+            Statistic(Homecide_data,Weekday_for_chart,Month_for_chart,Divison_for_chart,'statisticsDom',0);
 
         },
         error:function(){}
-    })
+    })};
+    homecideVisua();
 
 
     var geojsonMarkerOptions = {
@@ -426,8 +594,8 @@ Robbery_section.onclick=function () {
     var Weekday_for_chart;
     var Month_for_chart;
     var Divison_for_chart;*/
-
-    $.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
+    bounds=null;
+    robberyVisua=function (){$.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
         async : false,
         cache : false,
         type : 'POST',
@@ -438,7 +606,8 @@ Robbery_section.onclick=function () {
 
 
         },
-        success:function(data){
+        success:function(data1){
+            data=dataFilter(data1);
             Robbery_data=data;
             Robbery_data4Correlation=data;
             data_for_chart_r=DataToCSV(Robbery_data);
@@ -457,11 +626,13 @@ Robbery_section.onclick=function () {
             //console.log(Divison_for_chart);
             DivisonChart(Divison_for_chart_r,'DivisonChart');
 
-            Statistic(Robbery_data,Weekday_for_chart_r,Month_for_chart_r,Divison_for_chart_r,'statisticsDom');
+            Statistic(Robbery_data,Weekday_for_chart_r,Month_for_chart_r,Divison_for_chart_r,'statisticsDom',0);
 
         },
         error:function(){}
-    })
+    })};
+    robberyVisua();
+
 
 
     var geojsonMarkerOptions = {
@@ -491,9 +662,6 @@ Robbery_section.onclick=function () {
     plineGroup.addLayer(m)
     plineGroup.addTo(mymap);
 
-
-
-
 }
 
 Theft_section.onclick=function () {
@@ -508,8 +676,8 @@ Theft_section.onclick=function () {
     var Weekday_for_chart;
     var Month_for_chart;
     var Divison_for_chart;*/
-
-    $.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
+    bounds=null;
+    theftvisua=function (){$.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
         async : false,
         cache : false,
         type : 'POST',
@@ -520,7 +688,8 @@ Theft_section.onclick=function () {
 
 
         },
-        success:function(data){
+        success:function(data1){
+            data=dataFilter(data1);
             Theft_data=data;
             Theft_data4Correlation=data;
             data_for_chart_th=DataToCSV(Theft_data);
@@ -540,11 +709,12 @@ Theft_section.onclick=function () {
             //console.log(Divison_for_chart);
             DivisonChart(Divison_for_chart_th,'DivisonChart');
 
-            Statistic(Theft_data,Weekday_for_chart_th,Month_for_chart_th,Divison_for_chart_th,'statisticsDom');
+            Statistic(Theft_data,Weekday_for_chart_th,Month_for_chart_th,Divison_for_chart_th,'statisticsDom',0);
 
         },
         error:function(){}
-    })
+    })}
+    theftvisua();
 
 
     var geojsonMarkerOptions = {
@@ -582,7 +752,9 @@ Theft_section.onclick=function () {
 All_Crime.onclick=function(){
 
 
-    $.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
+    Index4Analysis='all';
+    bounds=null;
+    allVisua=function (){$.ajax({// 这地方不能直接html和后台进行交流，必须通过router, AJAX itself is a asynchronous http request,
         async : false,
         cache : true,
         type : 'POST',
@@ -595,6 +767,15 @@ All_Crime.onclick=function(){
         },
         success:function(data){
             console.log(data);
+
+            if(data_for_chart_ass&&data_for_chart_br&&data_for_chart_r&&data_for_chart_th&&Weekday_for_chart_ass&&Weekday_for_chart_br&&
+                Weekday_for_chart_r&&Weekday_for_chart_th&&Month_for_chart_ass&&Month_for_chart_br&&Month_for_chart_r&&Month_for_chart_th&&
+                Divison_for_chart_ass&&Divison_for_chart_br&&Divison_for_chart_r&&Divison_for_chart_th)
+            {
+
+            }
+
+            else {alert('Please check through each crime first')}
 
  /*           var Day_arr0=DataToCSV(data[0].values);//a,b,r,t
             var Day_arr1=DataToCSV(data[1].values);
@@ -631,7 +812,8 @@ All_Crime.onclick=function(){
             //console.log(Division_arr);
             DivisonChart(Division_arr,'DivisonChart');
 
-            Statistic(All_Data4Statistics,Week_arr,Month_arr,Division_arr,'statisticsDom');
+            Statistic(Day_arr,Week_arr,Month_arr,Division_arr,'statisticsDom',1);
+            //Statistic(Day_arr,Week_arr,Month_arr,Division_arr,'statisticsDom');
 
            /* SpatialCorrelation1(Assualt_data4Correlation,Break_data4Correlation,Homecide_data4Correlation,Robbery_data4Correlation,Theft_data4Correlation);
             console.log('data contents:')
@@ -643,9 +825,14 @@ All_Crime.onclick=function(){
 
         },
         error:function(){}
-    })
+    })};
+    allVisua();
+
 
 }
+
+
+
 
 Morans_I_section.onclick=function () {
     $.ajax({
@@ -659,16 +846,20 @@ Morans_I_section.onclick=function () {
         success:function (data) {
             switch (Index4Analysis) {
                 case 'assualt':
-                    Morans_Indicator(Divison_for_chart_ass,data);
+                    var m1=Morans_Indicator(Divison_for_chart_ass,data);
+                    alert(m1);
                     break;
                 case 'break':
-                    Morans_Indicator(Divison_for_chart_br,data);
+                    var m2=Morans_Indicator(Divison_for_chart_br,data);
+                    alert(m2);
                     break;
                 case 'robbery':
-                    Morans_Indicator(Divison_for_chart_r,data);
+                    var m3=Morans_Indicator(Divison_for_chart_r,data);
+                    alert(m3);
                     break;
                 case 'theft':
-                    Morans_Indicator(Divison_for_chart_th,data);
+                    var m4=Morans_Indicator(Divison_for_chart_th,data);
+                    alert(m4);
                     break;
 
 
@@ -719,12 +910,8 @@ Mean_Center.onclick=function () {
 
             console.log(data);
             for(let i=0;i<18;i++){
-                console.log(data);
                     Visualize_Mean_Center(data[i],mymap,plineGroup);
             }
-            //Visualize_Mean_Center(data,mymap,plineGroup,polyline);
-
-
 
             },
         err:function (data) {
@@ -760,19 +947,128 @@ Standard_ellipse.onclick=function () {
 
     })
 
-}
+};
+
+Getis_ord.onclick=function () {
+    plineGroup.eachLayer(function (layer) {
+        layer.remove();
+    })
+    var clusterData;
+    var judge=false;
+
+    function getting(){
+        $.ajax({
+            context:this,
+            async : false,
+            cache : false,
+            type : 'POST',
+            url:'/GetisOrd',
+            dataType:'json',
+            data:{crime_type:Index4Analysis},
+        /*    statusCode:{
+                202:function () {
+                    console.log('status is 202')
+                    getting();
+
+                },
+                200:function (data) {
+                    console.log('status is 200')
+                    console.log(data);
+
+                }
+            },*/
+            success:function (result) {
+
+                if (result=='waiting'){
+               /*     console.log('time to stop request');
+                    console.log(result);
+                    clusterData=result;
+                    console.log($(this).xhr);
+                    $(this).xhr.abort();//这地方会报错然后刚好跳出请求*/// this code could work but it has low efficiency
+
+                }//this is runned everytime that the status of server side child processing running is waiting. Actually do nothing here.
+                else{
+
+                    clusterData=result;
+                    judge=true;// this step stop the request loop
+                    var geojsonMarkerOptions = {
+                        radius: 16,
+                        fillColor: "#0c00ff",
+                        color: "#000",
+                        weight: 1,
+                        opacity: 1,
+                        fillOpacity: 0.8
+
+                    };
+                    function onEachFeature(feature, layer) {
+                        // does this feature have a property named popupContent?
+                        if (feature.properties) {
+                            layer.bindPopup('<br>'+'Crime type:'+feature.properties.Crime_type+'</br>'+'<br>'+'Occurance Date:'+feature.properties.Year.toString()+'/'+feature.properties.Month.toString()+'/'+feature.properties.Day.toString()+'&nbsp'+feature.properties.Time.toString()+':00'+'</br>'+'<br>'+'Division:'+feature.properties.Division.toString()+'</br>'+'<br>'+'Neighborhood:'+feature.properties.Neighborhood.toString()+'</br>');
+                        }
+                    }// The onEachFeature function needs to work only with string not number, so if you want to bindPopup sth, it has to be a string type, otherwise it give an error 'Failed to appendChild on node'
+                    m=L.geoJSON(clusterData,{
+                        pointToLayer: function (feature, latlng) {
+                            //L.circleMarker(latlng, geojsonMarkerOptions).addTo(markers);
+                            return L.circleMarker(latlng, geojsonMarkerOptions);
+                        },
+                        onEachFeature: onEachFeature
+
+                    });
+                    plineGroup.addLayer(m)
+                    plineGroup.addTo(mymap);
+
+                }// this is runned when the server side child processing is done, and then this step do the map render as well, and also stop the request loop.
+            },
+            error:function (err) {
+                console.log('err:');
+                console.log(err);
+
+            },
+            complete:function () {
+                if(judge===false){
+                    console.log('judge is false');
+                    //interval = setInterval(getting,0);
+                    setTimeout(getting,10000);
+
+                }
+                else {
+                    console.log('judge is true');
+
+                }
+            }// complete function is a function that runs after success and error, in this function, use setTimeOut() to loop the request and control the loop by judge variable.
+        })
+    }
+
+    getting();
 
 
 
+  /*  var geojsonMarkerOptions = {
+        radius: 16,
+        fillColor: "#0c00ff",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
 
+    };
+    function onEachFeature(feature, layer) {
+        // does this feature have a property named popupContent?
+        if (feature.properties) {
+            layer.bindPopup('<br>'+'Crime type:'+feature.properties.Crime_type+'</br>'+'<br>'+'Occurance Date:'+feature.properties.Year.toString()+'/'+feature.properties.Month.toString()+'/'+feature.properties.Day.toString()+'&nbsp'+feature.properties.Time.toString()+':00'+'</br>'+'<br>'+'Division:'+feature.properties.Division.toString()+'</br>'+'<br>'+'Neighborhood:'+feature.properties.Neighborhood.toString()+'</br>');
+        }
+    }// The onEachFeature function needs to work only with string not number, so if you want to bindPopup sth, it has to be a string type, otherwise it give an error 'Failed to appendChild on node'
+    m=L.geoJSON(clusterData,{
+        pointToLayer: function (feature, latlng) {
+            //L.circleMarker(latlng, geojsonMarkerOptions).addTo(markers);
+            return L.circleMarker(latlng, geojsonMarkerOptions);
+        },
+        onEachFeature: onEachFeature
 
-
-
-
-
-
-
-
+    });
+    plineGroup.addLayer(m)
+    plineGroup.addTo(mymap);*/
+};
 
 
 
@@ -827,8 +1123,8 @@ var combineTimeData=function (a1,a2,a3,a4) {
 
     var arr=[];
 
-    for(var i=0;i<25;i++){
-        arr.push({Time:i,frequency:a1[i].frequency+a2[i].frequency+a3[i].frequency+a4[i].frequency})
+    for(var i=0;i<24;i++){
+        arr.push(a1[i].frequency+a2[i].frequency+a3[i].frequency+a4[i].frequency)
     };
 
     return arr;
@@ -847,5 +1143,9 @@ var combineWeekData=function (a1,a2,a3,a4) {
     ];
 
     return arr;
+
+}
+
+var filterByCoordinates=function (data,bounds) {
 
 }
