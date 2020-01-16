@@ -7,3 +7,7 @@ The spatial analysis and planning part is composed of **Moran’s I**, which ana
  The backend is supported by **PostgreSQL and Amazon Storage service**. There is also multiple process applied here to make JavaScript integrate with python due to the powerful data analysis library it provides. This system also allows user to upload their own data and do analysis, which is implemented with the support of **Amazon AWS S3 cloud storage** service and PostgreSQL, for the consideration of big data, the data from user is uploaded to S3 and then goes to PostgreSQL database, and then backend side deal with the database to do the analysis. This system also contains basic routing and planning function based on the analysis results.
 
 Main function and codes are under 'Public' and 'routes' folders
+
+The system architecture looks like:
+
+![System architecture]()
