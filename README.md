@@ -10,4 +10,4 @@ Main function and codes are under 'Public' and 'routes' folders
 
 The system architecture looks like:
 
-![System architecture]()
+<img src='https://github.com/siyuan1995/crimedashboard/blob/master/dfsf.png' width=400 Height=400>
